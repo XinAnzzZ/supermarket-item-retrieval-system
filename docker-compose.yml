@@ -1,0 +1,11 @@
+version: '2'
+services:
+  java_service_test_domain_name:
+    container_name: java-service-sirs
+    image: maven:3.5.4-jdk-8-alpine
+    volumes:
+    - /root/.m2:/root/.m2
+    - /docker/java-service/supermarket-item-retrieval-system:/usr/src/mymaven
+    ports:
+    - "9002:9002"
+    command: "/bin/sh /usr/src/mymaven/docker-entrypoint.sh"
