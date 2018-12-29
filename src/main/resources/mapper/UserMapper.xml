@@ -4,4 +4,77 @@
 
 <mapper namespace="com.alibaba.xinan.sirs.mapper.UserMapper">
 
+    <select id="insert" parameterType="User">
+        INSERT INTO user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != '' ">
+                id,
+            </if>
+            <if test="username != null and username != '' ">
+                username,
+            </if>
+            <if test="password != null and password != '' ">
+                `password`,
+            </if>
+            <if test="phoneNumber != null and phoneNumber != '' ">
+                phone_number,
+            </if>
+            <if test="email != null and email != '' ">
+                email,
+            </if>
+            <if test="createTime != null and createTime != '' ">
+                create_time,
+            </if>
+            <if test="isDel != null and isDel != '' ">
+                is_del,
+            </if>
+        </trim>
+        <trim prefix="VALUES (" suffix=");" suffixOverrides=",">
+            <if test="id != null and id != '' ">
+                #{id},
+            </if>
+            <if test="username != null and username != '' ">
+                #{username},
+            </if>
+            <if test="password != null and password != '' ">
+                #{password},
+            </if>
+            <if test="phoneNumber != null and phoneNumber != '' ">
+                #{phone_number},
+            </if>
+            <if test="email != null and email != '' ">
+                #{email},
+            </if>
+            <if test="createTime != null and createTime != '' ">
+                #{create_time},
+            </if>
+            <if test="isDel != null and isDel != '' ">
+                #{is_del},
+            </if>
+        </trim>
+    </select>
+
+    <sql id="select_condition">条
+        <if test="id != null and id != '' ">
+            AND `id` = #{id}
+        </if>
+        <if test="username != null and username != '' ">
+            AND `username` = #{username}
+        </if>
+        <if test="password != null and password != '' ">
+            AND `password` = #{password}
+        </if>
+        <if test="phoneNumber != null and phoneNumber != '' ">
+            AND phone_number = #{phoneNumber}
+        </if>
+        <if test="email != null and email != '' ">
+            AND `email` = #{email}
+        </if>
+        <if test="createTime != null and createTime != '' ">
+            AND create_time = #{createTime}
+        </if>
+        <if test="isDel != null and isDel != '' ">
+            AND is_del = #{isDel}
+        </if>
+    </sql>
 </mapper>
