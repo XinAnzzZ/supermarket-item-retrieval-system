@@ -30,31 +30,24 @@
             </if>
         </trim>
         <trim prefix="VALUES (" suffix=");" suffixOverrides=",">
-            <if test="id != null and id != '' ">
-                #{id},
-            </if>
-            <if test="username != null and username != '' ">
-                #{username},
-            </if>
-            <if test="password != null and password != '' ">
-                #{password},
-            </if>
-            <if test="phoneNumber != null and phoneNumber != '' ">
-                #{phone_number},
-            </if>
-            <if test="email != null and email != '' ">
-                #{email},
-            </if>
-            <if test="createTime != null and createTime != '' ">
-                #{create_time},
-            </if>
-            <if test="isDel != null and isDel != '' ">
-                #{is_del},
-            </if>
+            <if test="id != null and id != '' ">#{id},</if>
+            <if test="username != null and username != '' ">#{username},</if>
+            <if test="password != null and password != '' ">#{password},</if>
+            <if test="phoneNumber != null and phoneNumber != '' ">#{phone_number},</if>
+            <if test="email != null and email != '' ">#{email},</if>
+            <if test="createTime != null and createTime != '' ">#{create_time},</if>
+            <if test="isDel != null and isDel != '' ">#{is_del},</if>
         </trim>
     </select>
 
-    <sql id="select_condition">条
+    <select id="findAll" parameterType="User" resultType="User">
+        SELECT id, username, password, phone_number, email, create_time, is_del FROM user
+        <where>
+            <include refid="select_condition"/>
+        </where>
+    </select>
+
+    <sql id="select_condition">
         <if test="id != null and id != '' ">
             AND `id` = #{id}
         </if>

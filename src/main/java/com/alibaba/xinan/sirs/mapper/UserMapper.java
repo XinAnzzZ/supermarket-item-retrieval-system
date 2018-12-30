@@ -4,6 +4,8 @@ import com.alibaba.xinan.sirs.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
 /**
  * @author XinAnzzZ
  * @date 2018/11/22 15:51
@@ -26,4 +28,12 @@ public interface UserMapper {
      */
     @Select("SELECT id, username, password, phone_number, email, create_time, is_del FROM user WHERE id = #{id};")
     User findById(String id);
+
+    /**
+     * find all
+     *
+     * @param user the user
+     * @return the user list
+     */
+    List<User> findAll(User user);
 }

@@ -85,6 +85,22 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-freemarker</artifactId>
         </dependency>
+
+        <!--
+            日志模块
+            常见的日志框架有 common-logging、log4j、logback
+            slf4j 他是一个顶级接口
+            logback和log4j是同一个作者，作者对log4j不满意，又懒得修改。所以开发了logback
+            我们用 logback
+            logback-classic 实现slf4j接口并进行整合。
+            在以前版本，我们需要加三个依赖，logback-core、logback-classic、slf4j-api，
+            最新版本只需要加入logback-classic
+        -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.3</version>
+        </dependency>
     </dependencies>
 
     <build>

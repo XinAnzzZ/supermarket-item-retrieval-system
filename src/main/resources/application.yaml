@@ -18,11 +18,17 @@ spring:
   datasource:
     druid:
       username: root
+      password: xinan
       url: jdbc:mysql://47.106.198.5:3306/sirs?characterEncoding=utf-8&useSSL=false
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.alibaba.xinan.sirs.entity
+  configuration:
+    # 自动转换驼峰命名
+    map-underscore-to-camel-case: true
+    # 对于映射未知列的行为 有三个属性可选 none warning failing
+    auto-mapping-unknown-column-behavior: warning
 
 pagehelper:
   auto-dialect: mysql
