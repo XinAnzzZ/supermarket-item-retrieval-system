@@ -6,7 +6,6 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
-import org.thymeleaf.TemplateEngine;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -21,9 +20,6 @@ public class MailUtils {
 
     @Autowired
     private JavaMailSender sender;
-
-    @Autowired
-    private TemplateEngine templateEngine;
 
     private String from = "13023195022@163.com";
 

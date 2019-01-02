@@ -1,7 +1,5 @@
 #!/bin/bash
 
-echo "redeploy"
-
 cd /usr/src/mymaven
 mvn clean install -Dmaven.test.skip
 cd ./target
