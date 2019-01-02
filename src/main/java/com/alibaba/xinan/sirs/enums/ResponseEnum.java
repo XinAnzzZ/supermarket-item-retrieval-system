@@ -18,8 +18,8 @@ public enum ResponseEnum {
     /*** 缺少token */
     MISS_TOKEN(401, "缺少Token！"),
 
-    /*** 参数校验未通过 */
-    AUTH_ERROR(402, "权限不足！"),
+    /*** 无权限 */
+    NO_PERMISSION(402, "权限不足！"),
 
     /*** token中缺少必须参数 */
     ERROR_TOKEN(403, "错误的token！"),

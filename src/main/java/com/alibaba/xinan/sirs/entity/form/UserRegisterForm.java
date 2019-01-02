@@ -1,5 +1,6 @@
 package com.alibaba.xinan.sirs.entity.form;
 
+import com.alibaba.xinan.sirs.consts.RegexConst;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
@@ -21,9 +22,11 @@ public class UserRegisterForm implements Serializable {
     @Length(min = 6, max = 26, message = "密码长度需要在6~16个字符之间！")
     private String password;
 
-    @Pattern(regexp = "^[1][3-9][0-9]{9}$", message = "手机号格式有误！")
+    private String passwordRepeat;
+
+    @Pattern(regexp = RegexConst.PHONE_REGEX, message = "手机号格式有误！")
     private String phoneNumber;
 
-    @Pattern(regexp = "^[A-Za-z0-9\\u4e00-\\u9fa5]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$", message = "邮箱格式错误！")
+    @Pattern(regexp = RegexConst.EMAIL_REGEX, message = "邮箱格式错误！")
     private String email;
 }

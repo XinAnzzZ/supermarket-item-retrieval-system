@@ -15,4 +15,12 @@ public interface CommonService {
      * @return the result
      */
     ResponseVO register(UserRegisterForm form);
+
+    /**
+     * send valid code email
+     *
+     * @param email email addr
+     * @return result
+     */
+    ResponseVO sendValidCodeEmail(String email);
 }
