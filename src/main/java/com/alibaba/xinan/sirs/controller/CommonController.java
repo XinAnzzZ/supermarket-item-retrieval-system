@@ -39,8 +39,8 @@ public class CommonController {
      * send email
      */
     @GetMapping("/send/valid/code/email")
-    public ResponseVO sendValidCodeEmail(String email) {
-        if (StringUtils.isEmpty(email)) {
+    public ResponseVO sendValidCodeEmail(String username, String email) {
+        if (StringUtils.isEmpty(username, email)) {
             return ResponseVO.fail(ResponseEnum.MISS_PARAM);
         }
         Pattern pattern = Pattern.compile(RegexConst.EMAIL_REGEX);
@@ -49,7 +49,7 @@ public class CommonController {
             return ResponseVO.fail("邮箱格式不正确！");
         }
 
-        return commonService.sendValidCodeEmail(email);
+        return commonService.sendValidCodeEmail(username, email);
     }
 
     /**

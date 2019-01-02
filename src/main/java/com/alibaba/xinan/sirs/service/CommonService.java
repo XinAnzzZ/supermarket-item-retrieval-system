@@ -19,8 +19,9 @@ public interface CommonService {
     /**
      * send valid code email
      *
-     * @param email email addr
+     * @param username the username
+     * @param email    email address
      * @return result
      */
-    ResponseVO sendValidCodeEmail(String email);
+    ResponseVO sendValidCodeEmail(String username, String email);
 }

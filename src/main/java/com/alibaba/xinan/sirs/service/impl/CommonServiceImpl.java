@@ -15,9 +15,7 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author XinAnzzZ
@@ -72,14 +70,14 @@ public class CommonServiceImpl implements CommonService {
     }
 
     @Override
-    public ResponseVO sendValidCodeEmail(String email) {
+    public ResponseVO sendValidCodeEmail(String username, String email) {
         Context context = new Context();
-        Map<String, Object> map = new HashMap<>(8);
-        map.put("username", "test");
-        map.put("code", "111");
-        context.setVariables(map);
-        String process = templateEngine.process("mailTemplates/registerMailTemplate", context);
-        mailUtils.sendHtmlMail(email, "test subject", process);
+        context.setVariable("username", username);
+        context.setVariable("code", email);
+        final String registerMailTemplateName = "mailTemplates/registerMailTemplate";
+        final String subject = "注册验证邮件";
+        String process = templateEngine.process(registerMailTemplateName, context);
+        mailUtils.sendHtmlMail(email, subject, process);
         return ResponseVO.success();
     }
 }

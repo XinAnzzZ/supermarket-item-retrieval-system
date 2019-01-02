@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8">
 </head>
-<body>
-<span style="">尊敬的用户<span th:text="#{username}"></span>：</span>
-欢迎您注册，您的验证码是<span th:text="#{code}"></span>，请勿将此验证码告知他人！
+<body style="font-size: large">
+<span style="">尊敬的用户<span th:text="${username}"></span>：</span><br/>
+<br/>
+<div style="margin-left: 5%">欢迎您注册，您的验证码是
+    <span style="font-style: oblique; color: red" th:text="${code}"></span>
+    ，请勿将此验证码告知他人！
+</div>
 </body>
 </html>
