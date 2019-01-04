@@ -20,6 +20,10 @@ CREATE TABLE user (
   create_time  DATETIME                    DEFAULT current_timestamp
   COMMENT '创建时间',
   is_del       VARCHAR(3)         NOT NULL DEFAULT 'NO'
-  COMMENT '是否删除'
+  COMMENT '是否删除',
+  KEY index_id(create_time, is_del),
+  UNIQUE INDEX idx_username(username),
+  UNIQUE INDEX idx_phone_number(phone_number),
+  UNIQUE INDEX idx_email(email)
 )
   COMMENT '用户表';
