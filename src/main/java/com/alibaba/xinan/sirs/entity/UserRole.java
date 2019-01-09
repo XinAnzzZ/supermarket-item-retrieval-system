@@ -13,7 +13,7 @@ public class UserRole implements Serializable {
 
     private static final long serialVersionUID = 5688490641346673852L;
 
-    private Integer id;
+    private String id;
 
     private Integer userId;
 
@@ -22,7 +22,7 @@ public class UserRole implements Serializable {
     public UserRole() {
     }
 
-    public UserRole(Integer id) {
+    public UserRole(String id) {
         this.id = id;
     }
 

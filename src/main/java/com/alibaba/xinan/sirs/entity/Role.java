@@ -17,5 +17,9 @@ public class Role {
 
     private String description;
 
-    private Date createDate;
+    private Date createTime;
+
+    private Date updateTime;
+
+    private Integer isDel;
 }

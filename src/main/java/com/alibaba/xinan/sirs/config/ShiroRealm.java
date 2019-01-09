@@ -17,7 +17,6 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class ShiroRealm extends AuthorizingRealm {
 
-
     /**
      * 获取认证信息
      *

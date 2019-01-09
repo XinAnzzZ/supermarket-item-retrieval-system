@@ -36,6 +36,16 @@ spring:
             required: true
           ssl:
             enable: true
+  redis:
+    host: 47.106.198.5
+    port: 6379
+    jedis:
+      pool:
+        max-idle: 8
+        min-idle: 0
+        max-active: 8
+        max-wait:
+    timeout:
 
 
 mybatis:
