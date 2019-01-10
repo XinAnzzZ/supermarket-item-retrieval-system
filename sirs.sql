@@ -26,6 +26,8 @@ CREATE TABLE user (
   UNIQUE INDEX idx_phone_number(phone_number),
   UNIQUE INDEX idx_email(email)
 )
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8
   COMMENT '用户表';
 
 -- 创建角色表
