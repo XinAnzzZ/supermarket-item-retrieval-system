@@ -1,9 +1,9 @@
 package com.alibaba.xinan.sirs.util;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -14,8 +14,8 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class RedisUtils {
 
-    @Autowired
-    private StringRedisTemplate redisTemplate;
+    @Resource
+    private RedisTemplate<byte[], byte[]> redisTemplate;
 
     /**
      * set key-value to redis
@@ -24,7 +24,7 @@ public class RedisUtils {
      * @param value  the value
      * @param expire the expire time TimeUnit.SECONDS
      */
-    public void set(String key, String value, int expire) {
+    public void set(byte[] key, byte[] value, int expire) {
         redisTemplate.opsForValue().set(key, value, expire, TimeUnit.SECONDS);
     }
 
@@ -34,7 +34,7 @@ public class RedisUtils {
      * @param key the key
      * @return the value
      */
-    public String get(Object key) {
+    public byte[] get(byte[] key) {
         return redisTemplate.opsForValue().get(key);
     }
 
@@ -43,7 +43,7 @@ public class RedisUtils {
      *
      * @param key the key
      */
-    public void deleteByKey(String key) {
+    public void deleteByKey(byte[] key) {
         redisTemplate.delete(key);
     }
 
@@ -53,7 +53,7 @@ public class RedisUtils {
      * @param keyPrefix the key pattern
      * @return the key set
      */
-    public Set<String> keys(String keyPrefix) {
-        return redisTemplate.keys(keyPrefix + "*");
+    public Set<byte[]> keys(String keyPrefix) {
+        return redisTemplate.keys((keyPrefix + "*").getBytes());
     }
 }

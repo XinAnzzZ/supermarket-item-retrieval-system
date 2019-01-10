@@ -2,6 +2,7 @@ package com.alibaba.xinan.sirs.entity;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -9,7 +10,9 @@ import java.util.Date;
  * @date 2018/11/21 10:56
  */
 @Data
-public class User {
+public class User implements Serializable {
+
+    private static final long serialVersionUID = 8028858897138219061L;
 
     private String id;
 

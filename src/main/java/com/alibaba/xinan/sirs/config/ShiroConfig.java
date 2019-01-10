@@ -7,6 +7,7 @@ import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.servlet.SimpleCookie;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -94,8 +95,17 @@ public class ShiroConfig {
     @Bean
     public DefaultWebSessionManager sessionManager() {
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+        sessionManager.setDeleteInvalidSessions(true);
+        sessionManager.setSessionIdCookie(cookie());
         sessionManager.setSessionDAO(sessionDAO());
         return sessionManager;
+    }
+
+    @Bean
+    public SimpleCookie cookie() {
+        SimpleCookie cookie = new SimpleCookie("SIRS_SESSIONID_COOKIE");
+        cookie.setPath("/");
+        return cookie;
     }
 
     /**

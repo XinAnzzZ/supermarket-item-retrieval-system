@@ -1,7 +1,7 @@
 package com.alibaba.xinan.sirs.config;
 
 import com.alibaba.xinan.sirs.util.RedisUtils;
-import com.alibaba.xinan.sirs.util.StringUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
 import org.apache.shiro.session.mgt.eis.AbstractSessionDAO;
@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.SerializationUtils;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,6 +21,7 @@ import java.util.Set;
  * @date 2019/1/10 15:59
  */
 @Component
+@Slf4j
 public class RedisSessionDAO extends AbstractSessionDAO {
 
     /*** shiro session 前缀 */
@@ -36,8 +36,9 @@ public class RedisSessionDAO extends AbstractSessionDAO {
     @Override
     protected Serializable doCreate(Session session) {
         Serializable sessionId = generateSessionId(session);
-        assignSessionId(session, sessionId);
         saveSession(session);
+        assignSessionId(session, sessionId);
+        log.error("生成session: sessionId = {}", sessionId);
         return sessionId;
     }
 
@@ -46,7 +47,7 @@ public class RedisSessionDAO extends AbstractSessionDAO {
         if (sessionId == null) {
             return null;
         }
-        String sessionKey = getSessionKey(sessionId);
+        byte[] sessionKey = getSessionKey(sessionId);
         return getSession(redisUtils.get(sessionKey));
     }
 
@@ -60,13 +61,13 @@ public class RedisSessionDAO extends AbstractSessionDAO {
         if (session == null || session.getId() == null) {
             return;
         }
-        String sessionKey = getSessionKey(session.getId());
+        byte[] sessionKey = getSessionKey(session.getId());
         redisUtils.deleteByKey(sessionKey);
     }
 
     @Override
     public Collection<Session> getActiveSessions() {
-        Set<String> keySet = redisUtils.keys(SHIRO_SESSION_PREFIX);
+        Set<byte[]> keySet = redisUtils.keys(SHIRO_SESSION_PREFIX);
         Set<Session> sessionSet = new HashSet<>(16);
         keySet.forEach(key -> sessionSet.add(getSession(redisUtils.get(key))));
         return sessionSet;
@@ -77,15 +78,15 @@ public class RedisSessionDAO extends AbstractSessionDAO {
      *
      * @param sessionId the session id
      */
-    private String getSessionKey(Serializable sessionId) {
-        return SHIRO_SESSION_PREFIX + sessionId;
+    private byte[] getSessionKey(Serializable sessionId) {
+        return (SHIRO_SESSION_PREFIX + sessionId).getBytes();
     }
 
-    private Session getSession(String sessionValue) {
-        if (StringUtils.isEmpty(sessionValue)) {
+    private Session getSession(byte[] sessionValue) {
+        if (sessionValue == null) {
             return null;
         }
-        return (Session) SerializationUtils.deserialize(sessionValue.getBytes());
+        return (Session) SerializationUtils.deserialize(sessionValue);
     }
 
     /**
@@ -95,9 +96,8 @@ public class RedisSessionDAO extends AbstractSessionDAO {
      */
     private void saveSession(Session session) {
         if (session != null && session.getId() != null) {
-            Serializable sessionId = generateSessionId(session);
-            String sessionKey = getSessionKey(sessionId);
-            String sessionValue = Arrays.toString(SerializationUtils.serialize(session));
+            byte[] sessionKey = getSessionKey(session.getId());
+            byte[] sessionValue = SerializationUtils.serialize(session);
             redisUtils.set(sessionKey, sessionValue, SHIRO_SESSION_EXPIRE);
         }
     }

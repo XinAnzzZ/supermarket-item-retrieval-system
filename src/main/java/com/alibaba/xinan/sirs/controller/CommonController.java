@@ -47,6 +47,7 @@ public class CommonController {
             return ResponseVO.fail(ResponseEnum.INCORRECT_CREDENTIAL);
         } catch (Exception e) {
             log.error("未知错误！");
+            e.printStackTrace();
             return ResponseVO.fail(ResponseEnum.LOGIN_FAILURE);
         }
         return ResponseVO.success();
