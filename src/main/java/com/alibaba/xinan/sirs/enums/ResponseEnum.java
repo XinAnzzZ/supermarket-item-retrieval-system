@@ -25,9 +25,21 @@ public enum ResponseEnum {
     ERROR_TOKEN(403, "错误的token！"),
 
     /*** 错误的参数 */
-    ERROR_PARAM(405, "错误的参数！"),
+    ERROR_PARAM(406, "错误的参数！"),
 
-    ERROR_VERIFICATION_CODE(400, "验证码错误！");
+    /*** 账号不存在 */
+    UNKNOWN_ACCOUNT(410, "账号不存在！"),
+
+    /*** 密码错误 */
+    INCORRECT_CREDENTIAL(411, "密码错误！"),
+
+    /*** 没有访问权限 */
+    UNAUTHORIZED(412, "没有访问权限！"),
+
+    /*** 登陆失败 */
+    LOGIN_FAILURE(413, "登陆失败！"),
+
+    ERROR_VERIFICATION_CODE(414, "验证码错误！");
 
     private Integer code;
 

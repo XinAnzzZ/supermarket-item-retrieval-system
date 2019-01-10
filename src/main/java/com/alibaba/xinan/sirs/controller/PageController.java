@@ -1,7 +1,6 @@
 package com.alibaba.xinan.sirs.controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 /**
@@ -14,12 +13,5 @@ public class PageController {
     @GetMapping(value = {"/", "/login"})
     public String login() {
         return "login";
-    }
-
-    @GetMapping("/test")
-    public String test(Model model) {
-        model.addAttribute("username", "test");
-        model.addAttribute("code", "123");
-        return "mailTemplates/registerMailTemplate";
     }
 }

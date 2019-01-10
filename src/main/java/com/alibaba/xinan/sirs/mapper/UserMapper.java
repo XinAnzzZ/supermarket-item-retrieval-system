@@ -26,8 +26,19 @@ public interface UserMapper {
      * @param id the user id
      * @return the user
      */
-    @Select("SELECT id, username, password, phone_number, email, create_time, is_del FROM user WHERE id = #{id};")
-    User findById(String id);
+    @Select("SELECT id, username, password, phone_number, email, create_time, is_del " +
+            "FROM user WHERE id = #{id};")
+    User getById(String id);
+
+    /**
+     * get by username
+     *
+     * @param username the username
+     * @return the user
+     */
+    @Select("SELECT id, username, password, phone_number, email, create_time, is_del " +
+            "FROM user WHERE username = #{username};")
+    User getByUsername(String username);
 
     /**
      * find all

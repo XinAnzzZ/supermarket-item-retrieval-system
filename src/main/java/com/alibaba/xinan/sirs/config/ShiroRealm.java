@@ -1,13 +1,16 @@
 package com.alibaba.xinan.sirs.config;
 
+import com.alibaba.xinan.sirs.entity.User;
+import com.alibaba.xinan.sirs.mapper.UserMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.util.ByteSource;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
 
 /**
  * @author XinAnzzZ
@@ -17,16 +20,27 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class ShiroRealm extends AuthorizingRealm {
 
+    @Resource
+    private UserMapper userMapper;
+
     /**
      * 获取认证信息
      *
-     * @param authenticationToken token  就是登陆时候带过来的认证信息，如果认证通过，这些信息会被shiro缓存
+     * @param token token  就是登陆时候带过来的认证信息，如果认证通过，这些信息会被shiro缓存
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(
-            AuthenticationToken authenticationToken) throws AuthenticationException {
-
-        return null;
+            AuthenticationToken token) throws AuthenticationException {
+        UsernamePasswordToken usernamePasswordToken = (UsernamePasswordToken) token;
+        String username = usernamePasswordToken.getUsername();
+        User user = userMapper.getByUsername(username);
+        if (user == null) {
+            throw new UnknownAccountException();
+        }
+        // 加盐，使用用户名作为盐
+        ByteSource credentialsSalt = ByteSource.Util.bytes(user.getUsername());
+        String realmName = getName();
+        return new SimpleAuthenticationInfo(user, user.getPassword(), credentialsSalt, realmName);
     }
 
     /**

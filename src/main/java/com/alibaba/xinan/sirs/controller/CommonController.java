@@ -8,6 +8,10 @@ import com.alibaba.xinan.sirs.enums.ResponseEnum;
 import com.alibaba.xinan.sirs.service.CommonService;
 import com.alibaba.xinan.sirs.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,7 +36,25 @@ public class CommonController {
     @PostMapping("/login")
     public ResponseVO login(@RequestBody User user) {
         log.info(user.toString());
-        return ResponseVO.fail("fail");
+        UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(), user.getPassword());
+        try {
+            SecurityUtils.getSubject().login(token);
+        } catch (UnknownAccountException e) {
+            log.error("用户名不存在！");
+            return ResponseVO.fail(ResponseEnum.UNKNOWN_ACCOUNT);
+        } catch (IncorrectCredentialsException e) {
+            log.error("密码错误！");
+            return ResponseVO.fail(ResponseEnum.INCORRECT_CREDENTIAL);
+        } catch (Exception e) {
+            log.error("未知错误！");
+            return ResponseVO.fail(ResponseEnum.LOGIN_FAILURE);
+        }
+        return ResponseVO.success();
+    }
+
+    @GetMapping("/test")
+    public ResponseVO test() {
+        return ResponseVO.success();
     }
 
     /**

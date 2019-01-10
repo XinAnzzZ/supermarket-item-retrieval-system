@@ -1,14 +1,15 @@
 package com.alibaba.xinan.sirs.config;
 
+import lombok.Data;
+import org.apache.shiro.authc.credential.CredentialsMatcher;
+import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
-import org.crazycake.shiro.RedisCacheManager;
-import org.crazycake.shiro.RedisManager;
-import org.crazycake.shiro.RedisSessionDAO;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -20,7 +21,13 @@ import java.util.Map;
  * @date 2019/1/9 16:38
  */
 @Configuration
+@ConfigurationProperties(prefix = "shiro")
+@Data
 public class ShiroConfig {
+
+    private String hashAlgorithmName;
+
+    private Integer hashIterations;
 
     @Bean
     public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
@@ -41,11 +48,15 @@ public class ShiroConfig {
         return shiroFilterFactoryBean;
     }
 
+    /**
+     * security manager
+     *
+     * @return security manager
+     */
     @Bean
     public SecurityManager securityManager() {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setRealm(shiroRealm());
-        securityManager.setCacheManager(redisCacheManager());
         securityManager.setSessionManager(sessionManager());
         return securityManager;
     }
@@ -57,27 +68,22 @@ public class ShiroConfig {
      */
     @Bean
     public ShiroRealm shiroRealm() {
-        return new ShiroRealm();
+        ShiroRealm shiroRealm = new ShiroRealm();
+        shiroRealm.setCredentialsMatcher(credentialsMatcher());
+        return shiroRealm;
     }
 
     /**
-     * redis 缓存管理器
+     * credentials matcher: 配置用于加密的算法和加密次数
      *
-     * @return redis 缓存管理器
+     * @return credentials matcher
      */
-    private RedisCacheManager redisCacheManager() {
-        RedisCacheManager redisCacheManager = new RedisCacheManager();
-        redisCacheManager.setRedisManager(redisManager());
-        return redisCacheManager;
-    }
-
-    private RedisManager redisManager() {
-        RedisManager redisManager = new RedisManager();
-        redisManager.setHost("47.106.198.5");
-        redisManager.setPort(6379);
-        redisManager.setExpire(1800);
-        redisManager.setTimeout(0);
-        return redisManager;
+    @Bean
+    public CredentialsMatcher credentialsMatcher() {
+        HashedCredentialsMatcher credentialsMatcher = new HashedCredentialsMatcher();
+        credentialsMatcher.setHashAlgorithmName(hashAlgorithmName);
+        credentialsMatcher.setHashIterations(hashIterations);
+        return credentialsMatcher;
     }
 
     /**
@@ -93,22 +99,20 @@ public class ShiroConfig {
     }
 
     /**
-     * session dao
+     * session dao 使用我们自己定义的 session dao
      *
      * @return session dao
      */
     @Bean
     public RedisSessionDAO sessionDAO() {
-        RedisSessionDAO sessionDAO = new RedisSessionDAO();
-        sessionDAO.setRedisManager(redisManager());
-        return sessionDAO;
+        return new RedisSessionDAO();
     }
 
     /**
      * Shiro生命周期处理器
      */
     @Bean
-    public LifecycleBeanPostProcessor getLifecycleBeanPostProcessor() {
+    public static LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
         return new LifecycleBeanPostProcessor();
     }
 

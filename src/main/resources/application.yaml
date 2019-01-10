@@ -39,14 +39,10 @@ spring:
   redis:
     host: 47.106.198.5
     port: 6379
-    jedis:
-      pool:
-        max-idle: 8
-        min-idle: 0
-        max-active: 8
-        max-wait:
-    timeout:
-
+    password: xinan_redis
+    timeout: 3000ms
+    # 关于jedis的配置 org.springframework.boot.autoconfigure.data.redis.RedisProperties
+    # 默认值： maxIdle = 8  minIdle = 0  maxActive = 8  maxWait = Duration.ofMillis(-1)
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
@@ -62,3 +58,8 @@ pagehelper:
   reasonable: true
   supportMethodsArguments: true
   params: count=countSql
+
+# shiro
+shiro:
+  hashAlgorithmName: MD5
+  hashIterations: 1024
