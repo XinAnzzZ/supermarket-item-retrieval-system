@@ -53,11 +53,6 @@ public class CommonController {
         return ResponseVO.success();
     }
 
-    @GetMapping("/test")
-    public ResponseVO test() {
-        return ResponseVO.success();
-    }
-
     /**
      * send email
      */
