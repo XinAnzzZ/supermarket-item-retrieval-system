@@ -28,7 +28,7 @@ public class RedisSessionDAO extends AbstractSessionDAO {
     private static final String SHIRO_SESSION_PREFIX = "sirs-session:";
 
     /*** shiro session 过期时间 300s 5分钟 */
-    private static final int SHIRO_SESSION_EXPIRE = 300;
+    private static final int SHIRO_SESSION_EXPIRE = 1800;
 
     @Autowired
     private RedisUtils redisUtils;
@@ -38,7 +38,7 @@ public class RedisSessionDAO extends AbstractSessionDAO {
         Serializable sessionId = generateSessionId(session);
         saveSession(session);
         assignSessionId(session, sessionId);
-        log.error("生成session: sessionId = {}", sessionId);
+        log.info("生成session: sessionId = {}", sessionId);
         return sessionId;
     }
 
@@ -48,6 +48,7 @@ public class RedisSessionDAO extends AbstractSessionDAO {
             return null;
         }
         byte[] sessionKey = getSessionKey(sessionId);
+        log.error("doReadSession==================");
         return getSession(redisUtils.get(sessionKey));
     }
 

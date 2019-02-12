@@ -88,13 +88,13 @@ public class ShiroConfig {
     }
 
     /**
-     * session管理器
+     * session管理器，使用自定义的session管理器
      *
      * @return session 管理器
      */
     @Bean
     public DefaultWebSessionManager sessionManager() {
-        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+        DefaultWebSessionManager sessionManager = new MySessionManager();
         sessionManager.setDeleteInvalidSessions(true);
         sessionManager.setSessionIdCookie(cookie());
         sessionManager.setSessionDAO(sessionDAO());

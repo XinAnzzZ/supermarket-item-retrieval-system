@@ -11,6 +11,7 @@ import com.alibaba.xinan.sirs.mapper.UserMapper;
 import com.alibaba.xinan.sirs.service.CommonService;
 import com.alibaba.xinan.sirs.util.MailUtils;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,9 +93,12 @@ public class CommonServiceImpl implements CommonService {
     @Override
     public ResponseVO getProductList(ProductQueryForm form) {
         ProductQuery query = ProductQuery.builder().build();
+
         BeanUtils.copyProperties(form, query);
-        PageHelper.startPage(form.getPageNum(), form.getPageSize());
-        List<Product> products = productMapper.listAll(query);
-        return ResponseVO.success(products);
+        PageInfo<Product> pageInfo = PageHelper
+                .startPage(form.getPageNum(), form.getPageSize())
+                .doSelectPageInfo(() -> productMapper.listAll(query));
+
+        return ResponseVO.success(pageInfo);
     }
 }

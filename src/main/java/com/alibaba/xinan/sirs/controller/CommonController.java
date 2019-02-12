@@ -1,5 +1,6 @@
 package com.alibaba.xinan.sirs.controller;
 
+import com.alibaba.xinan.sirs.consts.DataBaseConst;
 import com.alibaba.xinan.sirs.consts.RegexConst;
 import com.alibaba.xinan.sirs.entity.User;
 import com.alibaba.xinan.sirs.entity.form.ProductQueryForm;
@@ -90,6 +91,14 @@ public class CommonController {
      */
     @GetMapping("/product/list")
     public ResponseVO getProductList(ProductQueryForm form) {
+        if (form.getPageNum() == null || form.getPageNum() < DataBaseConst.DEFAULT_PAGE_NUM) {
+            form.setPageNum(DataBaseConst.DEFAULT_PAGE_NUM);
+        }
+        if (form.getPageSize() == null
+                || form.getPageSize() < DataBaseConst.MIN_PAGE_SIZE
+                || form.getPageSize() > DataBaseConst.MAX_PAGE_SIZE) {
+            form.setPageSize(DataBaseConst.DEFAULT_PAGE_SIZE);
+        }
         return commonService.getProductList(form);
     }
 }

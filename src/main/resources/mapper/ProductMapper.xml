@@ -6,23 +6,43 @@
 
 
     <select id="listAll" parameterType="com.alibaba.xinan.sirs.entity.query.ProductQuery"
-            resultType="com.alibaba.xinan.sirs.entity.Product">
+            resultMap="baseResultMap">
         SELECT
         <include refid="all_column"/>
-        FROM product
+        FROM product p LEFT JOIN product_category pc ON p.category_id = pc.id
         <where>
-            <if test="query.name != null and query.name != '' ">AND name LIKE CONCAT('%', #{query.name}, '%')</if>
-            <if test="query.minPrice != null">AND price &gt;= #{query.minPrice}</if>
-            <if test="query.maxPrice != null">AND price &lt;= #{query.maxPrice}</if>
-            <if test="query.stock != null">AND stock >= #{query.stock}</if>
+            <if test="query.name != null and query.name != '' ">AND p.name LIKE CONCAT('%', #{query.name}, '%')</if>
+            <if test="query.minPrice != null">AND p.price &gt;= #{query.minPrice}</if>
+            <if test="query.maxPrice != null">AND p.price &lt;= #{query.maxPrice}</if>
+            <if test="query.stock != null">AND p.stock >= #{query.stock}</if>
             <if test="query.description != null and query.description != '' ">
-                AND description LIKE CONCAT('%', #{query.description}, '%')
+                AND p.description LIKE CONCAT('%', #{query.description}, '%')
             </if>
-            <if test="query.categoryId != null">AND category_id = #{query.categoryId}</if>
+            <if test="query.categoryId != null">AND p.category_id = #{query.categoryId}</if>
         </where>
     </select>
 
     <sql id="all_column">
-        id, name, price, stock, description, status, category_id, create_time, update_time, is_del
+        p.id, p.name, p.price, p.stock, p.description, p.status, p.create_time, p.update_time, p.is_del,
+        pc.id pc_id, pc.name pc_name, pc.create_time pc_create_time, pc.update_time pc_update_time, pc.is_del pc_is_del
     </sql>
+
+    <resultMap id="baseResultMap" type="com.alibaba.xinan.sirs.entity.Product">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="price" property="price"/>
+        <result column="stock" property="stock"/>
+        <result column="description" property="description"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_del" property="isDel"/>
+        <association property="productCategory" column="pc_id" javaType="com.alibaba.xinan.sirs.entity.ProductCategory">
+            <id column="pc_id" property="id"/>
+            <result column="pc_name" property="name"/>
+            <result column="pc_create_time" property="createTime"/>
+            <result column="pc_update_time" property="updateTime"/>
+            <result column="pc_is_del" property="isDel"/>
+        </association>
+    </resultMap>
 </mapper>

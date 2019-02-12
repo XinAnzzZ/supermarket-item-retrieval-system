@@ -9,8 +9,123 @@
     <script type="application/javascript" src="../static/js/index.js"></script>
     <script type="application/javascript" src="../static/js/axios.min.js"></script>
 </head>
-<body>
-<div style="text-align: center"><h2>欢迎使用敲李奶奶超市物品检索系统</h2></div>
-
+<body style="background-color: #e2f4f6">
+<div id="app" style="text-align: center">
+    <div style="text-align: center; margin-top: 50px"><h2>欢迎使用敲李奶奶超市物品检索系统</h2></div>
+    <div>
+        <el-form inline :model="queryForm">
+            <el-form-item>
+                <el-input placeholder="商品名称" v-model="queryForm.name" @keydown.native="keyDown"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-select v-model="queryForm.price"
+                           clearable
+                           placeholder="价格区间"
+                           @change="changePrice"
+                           @clear="clearPrice">
+                    <el-option v-for="item in allPrice" :label="item" :value="item"></el-option>
+                </el-select>
+            </el-form-item>
+        </el-form>
+    </div>
+    <div style="margin-left: 5%; width: 90%">
+        <el-table :data="tableData.list" :border="true" stripe highlight-current-row>
+            <el-table-column type="index" width="50"></el-table-column>
+            <el-table-column prop="name" label="名称" width="180"></el-table-column>
+            <el-table-column prop="price" label="价格" width="180"></el-table-column>
+            <el-table-column prop="stock" label="库存" width="180"></el-table-column>
+            <el-table-column prop="productCategory.name" label="所属分类" width="180"></el-table-column>
+            <el-table-column prop="description" label="描述"></el-table-column>
+            <el-table-column prop="createTime" label="上架时间"></el-table-column>
+        </el-table>
+    </div>
+    <div style="margin-top: 10px;text-align: center;">
+        <el-pagination
+                background
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page="tableData.pageNum"
+                :page-sizes="[5, 20, 50, 100]"
+                :page-size="tableData.pageSize"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="tableData.total">
+        </el-pagination>
+    </div>
+</div>
+<script type="application/javascript">
+    new Vue({
+        el: "#app",
+        data: {
+            tableData: {
+                pageSize: 5,
+                pageNum: 1,
+                total: 0,
+                list: [],
+            },
+            queryForm: {
+                name: '',
+                minPrice: null,
+                maxPrice: null,
+                stock: null,
+                description: '',
+                categoryId: null,
+                pageSize: 5,
+                pageNum: 1,
+                price: ''
+            },
+            allPrice: [
+                '0 - 50',
+                '51 - 100',
+                '101 - 200',
+                '201 - 500',
+                '501 - 1000',
+                '1001 - 5000',
+                '5001 - 10000',
+            ],
+        },
+        methods: {
+            handleSizeChange(size) {
+                this.queryForm.pageSize = size;
+                this.loadTableData();
+            },
+            handleCurrentChange(num) {
+                this.queryForm.pageNum = num;
+                this.loadTableData();
+            },
+            loadTableData() {
+                axios.get('/product/list', {
+                    params: this.queryForm
+                })
+                    .then((res => {
+                        if (res.data.code === 200) {
+                            this.tableData = res.data['obj'];
+                        }
+                    }))
+                    .catch((error => {
+                        console.log(error);
+                        this.$message.error("unknown error !");
+                    }));
+            },
+            keyDown(event) {
+                if (event.keyCode === 13) {
+                    this.loadTableData();
+                }
+            },
+            clearPrice() {
+                this.queryForm.mixPrice = null;
+                this.queryForm.maxPrice = null;
+            },
+            changePrice(price) {
+                let priceArr = price.split("-");
+                this.queryForm.minPrice = parseInt(priceArr[0]);
+                this.queryForm.maxPrice = parseInt(priceArr[1]);
+                console.log(this.queryForm);
+            }
+        },
+        created() {
+            this.loadTableData();
+        }
+    });
+</script>
 </body>
 </html>
