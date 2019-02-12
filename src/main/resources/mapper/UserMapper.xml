@@ -4,7 +4,7 @@
 
 <mapper namespace="com.alibaba.xinan.sirs.mapper.UserMapper">
 
-    <select id="insert" parameterType="com.alibaba.xinan.sirs.entity.User">
+    <insert id="insert" parameterType="com.alibaba.xinan.sirs.entity.User">
         INSERT INTO user
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null and id != '' ">id,</if>
@@ -24,7 +24,7 @@
             <if test="createTime != null">#{createTime},</if>
             <if test="isDel != null">#{isDel},</if>
         </trim>
-    </select>
+    </insert>
 
     <select id="findAll"
             parameterType="com.alibaba.xinan.sirs.entity.User"

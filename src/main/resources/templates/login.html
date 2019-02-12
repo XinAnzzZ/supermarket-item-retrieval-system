@@ -41,8 +41,8 @@
         el: '#app',
         data: {
             loginForm: {
-                username: '123',
-                password: '123'
+                username: 'admin',
+                password: 'admin'
             }
         },
         methods: {
@@ -62,8 +62,11 @@
                 }
                 axios.post('/login', this.loginForm)
                     .then((res) => {
-                        if (res.data === 200) {
+                        if (res.data.code === 200) {
                             this.$message({type: 'success', message: 'login success !'});
+                            setTimeout(function () {
+                                location.href = '/index';
+                            }, 1500);
                             return;
                         }
                         this.$message.error(res.data['msg']);

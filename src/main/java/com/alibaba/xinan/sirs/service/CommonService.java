@@ -1,5 +1,6 @@
 package com.alibaba.xinan.sirs.service;
 
+import com.alibaba.xinan.sirs.entity.form.ProductQueryForm;
 import com.alibaba.xinan.sirs.entity.form.UserRegisterForm;
 import com.alibaba.xinan.sirs.entity.vo.ResponseVO;
 
@@ -24,4 +25,12 @@ public interface CommonService {
      * @return result
      */
     ResponseVO sendValidCodeEmail(String username, String email);
+
+    /**
+     * 获取商品列表
+     *
+     * @param form 查询条件封装对象
+     * @return 商品列表
+     */
+    ResponseVO getProductList(ProductQueryForm form);
 }

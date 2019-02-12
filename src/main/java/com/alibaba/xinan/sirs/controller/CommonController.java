@@ -2,6 +2,7 @@ package com.alibaba.xinan.sirs.controller;
 
 import com.alibaba.xinan.sirs.consts.RegexConst;
 import com.alibaba.xinan.sirs.entity.User;
+import com.alibaba.xinan.sirs.entity.form.ProductQueryForm;
 import com.alibaba.xinan.sirs.entity.form.UserRegisterForm;
 import com.alibaba.xinan.sirs.entity.vo.ResponseVO;
 import com.alibaba.xinan.sirs.enums.ResponseEnum;
@@ -82,5 +83,13 @@ public class CommonController {
     public ResponseVO register(@RequestBody @Valid UserRegisterForm form) {
         log.info("用户注册: {}" + form);
         return commonService.register(form);
+    }
+
+    /**
+     * 商品列表
+     */
+    @GetMapping("/product/list")
+    public ResponseVO getProductList(ProductQueryForm form) {
+        return commonService.getProductList(form);
     }
 }

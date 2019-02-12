@@ -21,7 +21,7 @@ public class MailUtils {
     @Autowired
     private JavaMailSender sender;
 
-    private String from = "13023195022@163.com";
+    private final String from = "13023195022@163.com";
 
     /**
      * 发送普通邮件

@@ -1,11 +1,16 @@
 package com.alibaba.xinan.sirs.service.impl;
 
+import com.alibaba.xinan.sirs.entity.Product;
 import com.alibaba.xinan.sirs.entity.User;
+import com.alibaba.xinan.sirs.entity.form.ProductQueryForm;
 import com.alibaba.xinan.sirs.entity.form.UserRegisterForm;
+import com.alibaba.xinan.sirs.entity.query.ProductQuery;
 import com.alibaba.xinan.sirs.entity.vo.ResponseVO;
+import com.alibaba.xinan.sirs.mapper.ProductMapper;
 import com.alibaba.xinan.sirs.mapper.UserMapper;
 import com.alibaba.xinan.sirs.service.CommonService;
 import com.alibaba.xinan.sirs.util.MailUtils;
+import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +32,9 @@ public class CommonServiceImpl implements CommonService {
 
     @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private ProductMapper productMapper;
 
     @Autowired
     private MailUtils mailUtils;
@@ -79,5 +87,14 @@ public class CommonServiceImpl implements CommonService {
         String process = templateEngine.process(registerMailTemplateName, context);
         mailUtils.sendHtmlMail(email, subject, process);
         return ResponseVO.success();
+    }
+
+    @Override
+    public ResponseVO getProductList(ProductQueryForm form) {
+        ProductQuery query = ProductQuery.builder().build();
+        BeanUtils.copyProperties(form, query);
+        PageHelper.startPage(form.getPageNum(), form.getPageSize());
+        List<Product> products = productMapper.listAll(query);
+        return ResponseVO.success(products);
     }
 }
