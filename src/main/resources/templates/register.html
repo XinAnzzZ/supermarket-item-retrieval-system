@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>XinAnzzZ is your father</title>
+    <link href="../static/image/summer.png" type="image/x-icon" rel="shortcut icon"/>
+    <link rel="stylesheet" href="../static/css/index.css">
+    <script src="../static/js/vue.js"></script>
+    <script type="application/javascript" src="../static/js/index.js"></script>
+    <script type="application/javascript" src="../static/js/axios.min.js"></script>
+</head>
+<body style="background: #7d8aca">
+<div id="app">
+    <div>
+        <img src="../static/image/summer.png" alt="summer"
+             style="height: 130px;margin-left: 20px;margin-top: 20px;">
+        <div style="font-size: xx-large; margin-left: 30px;color: aliceblue;margin-top: 10px">XinAnzzZ</div>
+    </div>
+    <div style="width: 30%;height: 40%;margin-left: 35%;margin-top: 5%">
+        <el-form ref="registerForm" :model="registerForm" label-width="80px">
+            <el-form-item>
+                <el-input v-model="registerForm.username" placeholder="username"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-input v-model="registerForm.password"
+                          placeholder="password"
+                          type="password"
+                          @keydown.native="keyDown"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="login">Login</el-button>
+                <el-button type="success" @click="welcome">I'm just a visitor</el-button>
+                <el-button @click="welcome">I want a account</el-button>
+            </el-form-item>
+        </el-form>
+    </div>
+</div>
+
+<script type="application/javascript">
+    new Vue({
+        el: '#app',
+        data: {
+            registerForm: {
+                username: '123',
+                password: '123'
+            }
+        },
+        methods: {
+            keyDown(event) {
+                if (event.keyCode === 13) {
+                    this.login();
+                }
+            },
+            login() {
+                if (this.registerForm.username === '') {
+                    this.$message.error('please enter username !');
+                    return;
+                }
+                if (this.registerForm.password === '') {
+                    this.$message.error('please enter password !');
+                    return;
+                }
+                axios.post('/login', this.registerForm)
+                    .then((res) => {
+                        if (res.data === 200) {
+                            this.$message({type: 'success', message: 'login success !'});
+                            return;
+                        }
+                        this.$message.error(res.data['msg']);
+                    })
+                    .catch(() => {
+                        this.$message.error("unknown error !");
+                    });
+            },
+            welcome() {
+                this.$message({message: '^_^ welcome ! my friend.', type: 'success'});
+            }
+        }
+    });
+</script>
+</body>
+</html>
