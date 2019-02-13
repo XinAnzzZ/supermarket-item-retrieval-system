@@ -96,4 +96,12 @@ public class CommonController {
         }
         return commonService.getProductList(form);
     }
+
+    /**
+     * 类目列表
+     */
+    @GetMapping("/category/list")
+    public ResponseVO getProductCategoryList() {
+        return commonService.getProductCategoryList();
+    }
 }

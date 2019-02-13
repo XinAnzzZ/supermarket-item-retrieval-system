@@ -33,4 +33,11 @@ public interface CommonService {
      * @return 商品列表
      */
     ResponseVO getProductList(ProductQueryForm form);
+
+    /**
+     * 获取商品类目列表
+     *
+     * @return 类目列表
+     */
+    ResponseVO getProductCategoryList();
 }

@@ -14,7 +14,6 @@
             <if test="query.name != null and query.name != '' ">AND p.name LIKE CONCAT('%', #{query.name}, '%')</if>
             <if test="query.minPrice != null">AND p.price &gt;= #{query.minPrice}</if>
             <if test="query.maxPrice != null">AND p.price &lt;= #{query.maxPrice}</if>
-            <if test="query.stock != null">AND p.stock >= #{query.stock}</if>
             <if test="query.description != null and query.description != '' ">
                 AND p.description LIKE CONCAT('%', #{query.description}, '%')
             </if>

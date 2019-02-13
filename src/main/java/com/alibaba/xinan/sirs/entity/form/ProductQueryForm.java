@@ -22,9 +22,6 @@ public class ProductQueryForm implements Serializable {
     /*** 最大价格 */
     private Integer maxPrice;
 
-    /*** 库存量 */
-    private Integer stock;
-
     /*** 商品描述 */
     private String description;
 

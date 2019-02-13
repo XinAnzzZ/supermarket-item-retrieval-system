@@ -4,4 +4,9 @@
 
 <mapper namespace="com.alibaba.xinan.sirs.mapper.ProductCategoryMapper">
 
+    <select id="listAllCategory" resultType="com.alibaba.xinan.sirs.entity.ProductCategory">
+        SELECT id, name, create_time, update_time, is_del
+        FROM product_category
+        WHERE is_del = 0
+    </select>
 </mapper>

@@ -26,6 +26,15 @@
                     <el-option v-for="item in allPrice" :label="item" :value="item"></el-option>
                 </el-select>
             </el-form-item>
+            <el-form-item>
+                <el-select v-model="queryForm.categoryId"
+                           clearable
+                           placeholder="商品分类"
+                           @change="changeCategory"
+                           @clear="clearCategory">
+                    <el-option v-for="item in allCategory" :label="item.name" :value="item.id"></el-option>
+                </el-select>
+            </el-form-item>
         </el-form>
     </div>
     <div style="margin-left: 5%; width: 90%">
@@ -64,11 +73,10 @@
             },
             queryForm: {
                 name: '',
-                minPrice: null,
-                maxPrice: null,
-                stock: null,
+                minPrice: '',
+                maxPrice: '',
                 description: '',
-                categoryId: null,
+                categoryId: '',
                 pageSize: 5,
                 pageNum: 1,
                 price: ''
@@ -82,6 +90,7 @@
                 '1001 - 5000',
                 '5001 - 10000',
             ],
+            allCategory: [],
         },
         methods: {
             handleSizeChange(size) {
@@ -112,19 +121,34 @@
                 }
             },
             clearPrice() {
-                this.queryForm.mixPrice = null;
-                this.queryForm.maxPrice = null;
-                this.loadTableData();
+                this.queryForm.minPrice = '';
+                this.queryForm.maxPrice = '';
             },
             changePrice(price) {
                 let priceArr = price.split("-");
                 this.queryForm.minPrice = parseInt(priceArr[0]);
                 this.queryForm.maxPrice = parseInt(priceArr[1]);
                 this.loadTableData();
-            }
+            },
+            clearCategory() {
+                this.queryForm.categoryId = '';
+            },
+            changeCategory(id) {
+                this.queryForm.categoryId = id;
+                this.loadTableData();
+            },
+            getAllCategoryList() {
+                axios.get('/category/list')
+                    .then((res) => {
+                        if (res.data.code === 200) {
+                            this.allCategory = res.data['obj'];
+                        }
+                    });
+            },
         },
         created() {
             this.loadTableData();
+            this.getAllCategoryList();
         }
     });
 </script>

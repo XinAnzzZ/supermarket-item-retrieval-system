@@ -6,6 +6,7 @@ import com.alibaba.xinan.sirs.entity.form.ProductQueryForm;
 import com.alibaba.xinan.sirs.entity.form.UserRegisterForm;
 import com.alibaba.xinan.sirs.entity.query.ProductQuery;
 import com.alibaba.xinan.sirs.entity.vo.ResponseVO;
+import com.alibaba.xinan.sirs.mapper.ProductCategoryMapper;
 import com.alibaba.xinan.sirs.mapper.ProductMapper;
 import com.alibaba.xinan.sirs.mapper.UserMapper;
 import com.alibaba.xinan.sirs.service.CommonService;
@@ -36,6 +37,9 @@ public class CommonServiceImpl implements CommonService {
 
     @Resource
     private ProductMapper productMapper;
+
+    @Resource
+    private ProductCategoryMapper productCategoryMapper;
 
     @Autowired
     private MailUtils mailUtils;
@@ -100,5 +104,10 @@ public class CommonServiceImpl implements CommonService {
                 .doSelectPageInfo(() -> productMapper.listAll(query));
 
         return ResponseVO.success(pageInfo);
+    }
+
+    @Override
+    public ResponseVO getProductCategoryList() {
+        return ResponseVO.success(productCategoryMapper.listAllCategory());
     }
 }

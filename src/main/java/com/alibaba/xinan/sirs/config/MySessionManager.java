@@ -40,6 +40,7 @@ public class MySessionManager extends DefaultWebSessionManager {
         if (request != null && sessionId != null) {
             request.setAttribute(sessionId.toString(), session);
         }
+
         return session;
     }
 }
