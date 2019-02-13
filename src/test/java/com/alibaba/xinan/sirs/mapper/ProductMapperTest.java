@@ -28,7 +28,6 @@ public class ProductMapperTest {
                 .minPrice(1)
                 .maxPrice(9999)
                 .name("点")
-                .stock(20)
                 .build();
         System.out.println(productMapper.listAll(query));
     }
