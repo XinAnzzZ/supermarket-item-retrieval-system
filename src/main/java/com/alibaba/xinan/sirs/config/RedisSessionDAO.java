@@ -48,7 +48,7 @@ public class RedisSessionDAO extends AbstractSessionDAO {
             return null;
         }
         byte[] sessionKey = getSessionKey(sessionId);
-        log.error("doReadSession==================");
+        log.info("doReadSession==================");
         return getSession(redisUtils.get(sessionKey));
     }
 
