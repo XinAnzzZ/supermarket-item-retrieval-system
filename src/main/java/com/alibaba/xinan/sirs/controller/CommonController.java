@@ -3,6 +3,7 @@ package com.alibaba.xinan.sirs.controller;
 import com.alibaba.xinan.sirs.consts.DataBaseConst;
 import com.alibaba.xinan.sirs.consts.RegexConst;
 import com.alibaba.xinan.sirs.entity.User;
+import com.alibaba.xinan.sirs.entity.form.ProductAddForm;
 import com.alibaba.xinan.sirs.entity.form.ProductQueryForm;
 import com.alibaba.xinan.sirs.entity.form.UserRegisterForm;
 import com.alibaba.xinan.sirs.entity.vo.ResponseVO;
@@ -15,6 +16,7 @@ import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -95,6 +97,17 @@ public class CommonController {
             form.setPageSize(DataBaseConst.DEFAULT_PAGE_SIZE);
         }
         return commonService.getProductList(form);
+    }
+
+    /**
+     * 添加商品
+     */
+    @PostMapping("/add/product")
+    public ResponseVO addProduct(@RequestBody @Valid ProductAddForm form, BindingResult result) {
+        if (result.hasErrors()) {
+            return ResponseVO.fail(result.getAllErrors().toString());
+        }
+        return commonService.addProduct(form);
     }
 
     /**

@@ -19,10 +19,7 @@
     </appender>
 
     <root level="DEBUG">
-        <!-- 上线请注释下面这行代码 -->
         <appender-ref ref="console_log"/>
-        <!--<appender-ref ref="file_info_log"/>-->
-        <!--<appender-ref ref="file_error_log"/>-->
     </root>
 
 </configuration>

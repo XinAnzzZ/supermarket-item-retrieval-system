@@ -1,5 +1,6 @@
 package com.alibaba.xinan.sirs.service;
 
+import com.alibaba.xinan.sirs.entity.form.ProductAddForm;
 import com.alibaba.xinan.sirs.entity.form.ProductQueryForm;
 import com.alibaba.xinan.sirs.entity.form.UserRegisterForm;
 import com.alibaba.xinan.sirs.entity.vo.ResponseVO;
@@ -40,4 +41,12 @@ public interface CommonService {
      * @return 类目列表
      */
     ResponseVO getProductCategoryList();
+
+    /**
+     * 添加商品
+     *
+     * @param form data form
+     * @return result
+     */
+    ResponseVO addProduct(ProductAddForm form);
 }

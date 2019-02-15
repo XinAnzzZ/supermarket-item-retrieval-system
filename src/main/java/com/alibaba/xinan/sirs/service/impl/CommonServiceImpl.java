@@ -2,6 +2,7 @@ package com.alibaba.xinan.sirs.service.impl;
 
 import com.alibaba.xinan.sirs.entity.Product;
 import com.alibaba.xinan.sirs.entity.User;
+import com.alibaba.xinan.sirs.entity.form.ProductAddForm;
 import com.alibaba.xinan.sirs.entity.form.ProductQueryForm;
 import com.alibaba.xinan.sirs.entity.form.UserRegisterForm;
 import com.alibaba.xinan.sirs.entity.query.ProductQuery;
@@ -10,6 +11,7 @@ import com.alibaba.xinan.sirs.mapper.ProductCategoryMapper;
 import com.alibaba.xinan.sirs.mapper.ProductMapper;
 import com.alibaba.xinan.sirs.mapper.UserMapper;
 import com.alibaba.xinan.sirs.service.CommonService;
+import com.alibaba.xinan.sirs.util.CommonUtils;
 import com.alibaba.xinan.sirs.util.MailUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -109,5 +111,14 @@ public class CommonServiceImpl implements CommonService {
     @Override
     public ResponseVO getProductCategoryList() {
         return ResponseVO.success(productCategoryMapper.listAllCategory());
+    }
+
+    @Override
+    public ResponseVO addProduct(ProductAddForm form) {
+        Product product = new Product();
+        BeanUtils.copyProperties(form, product);
+        product.setId(CommonUtils.generateId());
+        productMapper.insert(product);
+        return ResponseVO.success();
     }
 }

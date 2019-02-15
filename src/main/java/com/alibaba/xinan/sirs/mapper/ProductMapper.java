@@ -21,4 +21,11 @@ public interface ProductMapper {
      * @return 商品列表
      */
     List<Product> listAll(@Param("query") ProductQuery query);
+
+    /**
+     * 插入
+     *
+     * @param product the product
+     */
+    void insert(Product product);
 }

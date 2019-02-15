@@ -28,6 +28,8 @@ public class Product implements Serializable {
 
     private ProductCategory productCategory;
 
+    private String location;
+
     private Date createTime;
 
     private Date updateTime;
