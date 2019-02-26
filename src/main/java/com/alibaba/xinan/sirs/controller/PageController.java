@@ -29,4 +29,9 @@ public class PageController {
     public String edit() {
         return "edit";
     }
+
+    @GetMapping("/nav")
+    public String nav() {
+        return "nav";
+    }
 }
