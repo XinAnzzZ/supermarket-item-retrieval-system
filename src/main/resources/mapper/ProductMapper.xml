@@ -3,11 +3,11 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.alibaba.xinan.sirs.mapper.ProductMapper">
-    <insert id="insert" parameterType="com.alibaba.xinan.sirs.entity.Product">
-        INSERT INTO product (id, name, price, stock, description, category_id, location)
-        VALUES (#{id}, #{name}, #{price}, #{stock}, #{description}, #{categoryId}, #{location})
+    <insert id="insert" parameterType="com.alibaba.xinan.sirs.entity.form.ProductAddForm">
+        REPLACE INTO product (id, name, price, stock, description, category_id, location)
+        VALUES (#{form.id}, #{form.name}, #{form.price}, #{form.stock}, #{form.description}, #{form.categoryId},
+                #{form.location})
     </insert>
-
 
     <select id="listAll" parameterType="com.alibaba.xinan.sirs.entity.query.ProductQuery"
             resultMap="baseResultMap">
@@ -22,6 +22,7 @@
                 AND p.description LIKE CONCAT('%', #{query.description}, '%')
             </if>
             <if test="query.categoryId != null">AND p.category_id = #{query.categoryId}</if>
+            AND p.is_del = 0
         </where>
     </select>
 

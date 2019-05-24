@@ -49,4 +49,20 @@ public interface CommonService {
      * @return result
      */
     ResponseVO addProduct(ProductAddForm form);
+
+    /**
+     * delete product
+     *
+     * @param productId product id
+     * @return resp
+     */
+    ResponseVO deleteProduct(String productId);
+
+    /**
+     * 更新商品
+     *
+     * @param productAddForm product
+     * @return result
+     */
+    ResponseVO editProduct(ProductAddForm productAddForm);
 }

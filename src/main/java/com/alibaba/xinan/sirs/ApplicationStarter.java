@@ -11,9 +11,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @SpringBootApplication
 @MapperScan(basePackages = "com.alibaba.xinan.sirs.mapper", annotationClass = Mapper.class)
-public class SupermarketItemRetrievalSystemApplication {
+public class ApplicationStarter {
 
     public static void main(String[] args) {
-        SpringApplication.run(SupermarketItemRetrievalSystemApplication.class, args);
+        SpringApplication.run(ApplicationStarter.class, args);
     }
 }

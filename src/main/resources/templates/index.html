@@ -35,6 +35,9 @@
                     <el-option v-for="item in allCategory" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
+            <el-form-item>
+                <el-button type="success" @click="addProduct()">添加商品</el-button>
+            </el-form-item>
         </el-form>
     </div>
     <div style="margin-left: 5%; width: 90%">
@@ -47,6 +50,19 @@
             <el-table-column prop="description" label="描述"></el-table-column>
             <el-table-column prop="location" label="位置"></el-table-column>
             <el-table-column prop="createTime" label="上架时间"></el-table-column>
+            <el-table-column label="操作" width="150px">
+                <template slot-scope="scope">
+                    <el-button
+                            size="mini"
+                            @click="openEditPage(scope.row)">编辑
+                    </el-button>
+                    <el-button
+                            size="mini"
+                            type="danger"
+                            @click="handleDelete(scope.row)">删除
+                    </el-button>
+                </template>
+            </el-table-column>
         </el-table>
     </div>
     <div style="margin-top: 10px;text-align: center;">
@@ -61,6 +77,100 @@
                 :total="tableData.total">
         </el-pagination>
     </div>
+    <!-- 编辑商品 dialog start -->
+    <div>
+        <el-dialog
+                title="编辑商品"
+                :visible.sync="dialogVisible"
+                width="30%"
+                center>
+            <el-form :model="editProductForm" ref="editProductForm" label-width="70px">
+                <el-form-item>
+                    <el-input v-model="editProductForm.id" style="display: none"></el-input>
+                </el-form-item>
+                <el-form-item label="名称">
+                    <el-input v-model="editProductForm.name"></el-input>
+                </el-form-item>
+                <el-form-item label="价格">
+                    <el-input v-model="editProductForm.price"></el-input>
+                </el-form-item>
+                <el-form-item label="库存">
+                    <el-input v-model="editProductForm.stock"></el-input>
+                </el-form-item>
+                <el-form-item label="所属分类" width="100%">
+                    <el-select v-model="editProductForm.productCategory.id" placeholder="请选择分类">
+                        <el-option label="日用品" value="1"></el-option>
+                        <el-option label="数码产品" value="2"></el-option>
+                        <el-option label="床上用品" value="3"></el-option>
+                        <el-option label="厨房用品" value="4"></el-option>
+                        <el-option label="运动" value="5"></el-option>
+                        <el-option label="书籍" value="6"></el-option>
+                        <el-option label="家电" value="7"></el-option>
+                        <el-option label="零食" value="8"></el-option>
+                        <el-option label="生鲜" value="9"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="位置">
+                    <el-input v-model="editProductForm.location"></el-input>
+                </el-form-item>
+                <el-form-item label="上架时间">
+                    <el-input v-model="editProductForm.createTime"></el-input>
+                </el-form-item>
+                <el-form-item label="描述">
+                    <el-input v-model="editProductForm.description" type="textarea"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button @click="dialogVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="handleConfirmEdit">确 定</el-button>
+                </el-form-item>
+            </el-form>
+        </el-dialog>
+    </div>
+    <!-- 编辑商品 dialog end -->
+    <!-- 添加商品 dialog start -->
+    <div>
+        <el-dialog
+                title="添加商品"
+                :visible.sync="addProductDialogVisible"
+                width="30%"
+                center>
+            <el-form :model="addProductForm" ref="addProductForm" label-width="70px">
+                <el-form-item label="名称">
+                    <el-input v-model="addProductForm.name"></el-input>
+                </el-form-item>
+                <el-form-item label="价格">
+                    <el-input v-model="addProductForm.price"></el-input>
+                </el-form-item>
+                <el-form-item label="库存">
+                    <el-input v-model="addProductForm.stock"></el-input>
+                </el-form-item>
+                <el-form-item label="所属分类" width="100%">
+                    <el-select v-model="addProductForm.categoryId" placeholder="请选择分类">
+                        <el-option label="日用品" value="1"></el-option>
+                        <el-option label="数码产品" value="2"></el-option>
+                        <el-option label="床上用品" value="3"></el-option>
+                        <el-option label="厨房用品" value="4"></el-option>
+                        <el-option label="运动" value="5"></el-option>
+                        <el-option label="书籍" value="6"></el-option>
+                        <el-option label="家电" value="7"></el-option>
+                        <el-option label="零食" value="8"></el-option>
+                        <el-option label="生鲜" value="9"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="位置">
+                    <el-input v-model="addProductForm.location"></el-input>
+                </el-form-item>
+                <el-form-item label="描述">
+                    <el-input v-model="addProductForm.description" type="textarea"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button @click="addProductDialogVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="handleAddProductDialogConfirm">确 定</el-button>
+                </el-form-item>
+            </el-form>
+        </el-dialog>
+    </div>
+    <!-- 添加商品 dialog end -->
 </div>
 <script type="application/javascript">
     new Vue({
@@ -92,6 +202,27 @@
                 '5001 - 10000',
             ],
             allCategory: [],
+            dialogVisible: false,
+            // 编辑一行数据时 form 表单的数据
+            editProductForm: {
+                id: null,
+                name: "",
+                price: null,
+                stock: null,
+                productCategory: {},
+                location: "",
+                createTime: null,
+                description: "",
+            },
+            addProductForm: {
+                name: "",
+                price: null,
+                stock: null,
+                productCategory: {},
+                location: "",
+                description: "",
+            },
+            addProductDialogVisible: false,
         },
         methods: {
             handleSizeChange(size) {
@@ -146,6 +277,64 @@
                         }
                     });
             },
+            // 打开编辑 dialog
+            openEditPage(row) {
+                this.dialogVisible = true;
+                this.editProductForm.id = row.id;
+                this.editProductForm.name = row.name;
+                this.editProductForm.price = row.price;
+                this.editProductForm.stock = row.stock;
+                this.editProductForm.categoryId = row.productCategory.id;
+                this.editProductForm.location = row.location;
+                this.editProductForm.createTime = row.createTime;
+                this.editProductForm.description = row.description;
+            },
+            // 关闭编辑窗口
+            handleClose(done) {
+                this.$confirm('确认关闭？')
+                    .then(_ => {
+                        done();
+                    })
+                    .catch(_ => {
+                    });
+            },
+            // 确认提交编辑按钮事件
+            handleConfirmEdit() {
+                this.dialogVisible = false;
+                axios.put('/product/edit', this.editProductForm)
+                    .then(res => {
+                        this.$message({type: 'success', message: '更新成功！'});
+                        this.loadTableData();
+                    });
+            },
+            // 删除按钮事件
+            handleDelete(row) {
+                this.$confirm('确认删除？')
+                    .then(_ => {
+                        axios.delete('/product/' + row.id)
+                            .then((res) => {
+                                this.$message({type: 'success', message: 'delete success !'});
+                                ;
+                            });
+                        this.loadTableData();
+                    })
+                    .catch(_ => {
+                    });
+            },
+            // 打开添加商品 dialog
+            addProduct() {
+                this.addProductDialogVisible = true;
+            },
+            // 处理添加商品 dialog 确定按钮事件
+            handleAddProductDialogConfirm() {
+                axios.post('/add/product', this.addProductForm)
+                    .then(res => {
+                        this.addProductDialogVisible = false;
+                        this.$message({type: 'success', message: '添加成功！'})
+                        this.loadTableData();
+                    });
+            },
+
         },
         created() {
             this.loadTableData();

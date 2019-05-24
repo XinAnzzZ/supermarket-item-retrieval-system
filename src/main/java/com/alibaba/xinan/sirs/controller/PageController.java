@@ -25,13 +25,8 @@ public class PageController {
         return "register";
     }
 
-    @GetMapping("/edit")
+    @GetMapping("/person")
     public String edit() {
-        return "edit";
-    }
-
-    @GetMapping("/nav")
-    public String nav() {
-        return "nav";
+        return "person";
     }
 }

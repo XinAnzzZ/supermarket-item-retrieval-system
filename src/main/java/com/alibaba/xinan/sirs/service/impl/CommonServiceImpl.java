@@ -115,10 +115,20 @@ public class CommonServiceImpl implements CommonService {
 
     @Override
     public ResponseVO addProduct(ProductAddForm form) {
-        Product product = new Product();
-        BeanUtils.copyProperties(form, product);
-        product.setId(CommonUtils.generateId());
-        productMapper.insert(product);
+        form.setId(CommonUtils.generateId());
+        productMapper.insert(form);
+        return ResponseVO.success();
+    }
+
+    @Override
+    public ResponseVO deleteProduct(String productId) {
+        productMapper.deleteById(productId);
+        return ResponseVO.success();
+    }
+
+    @Override
+    public ResponseVO editProduct(ProductAddForm productAddForm) {
+        productMapper.insert(productAddForm);
         return ResponseVO.success();
     }
 }

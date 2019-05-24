@@ -27,7 +27,7 @@ public interface UserMapper {
      * @return the user
      */
     @Select("SELECT id, username, password, phone_number, email, create_time, is_del " +
-            "FROM user WHERE id = #{id};")
+            "FROM user WHERE id = #{id}")
     User getById(String id);
 
     /**
@@ -37,7 +37,7 @@ public interface UserMapper {
      * @return the user
      */
     @Select("SELECT id, username, password, phone_number, email, create_time, is_del " +
-            "FROM user WHERE username = #{username};")
+            "FROM user WHERE username = #{username}")
     User getByUsername(String username);
 
     /**
