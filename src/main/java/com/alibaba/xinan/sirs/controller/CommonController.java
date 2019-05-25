@@ -2,6 +2,7 @@ package com.alibaba.xinan.sirs.controller;
 
 import com.alibaba.xinan.sirs.consts.DataBaseConst;
 import com.alibaba.xinan.sirs.consts.RegexConst;
+import com.alibaba.xinan.sirs.entity.Account;
 import com.alibaba.xinan.sirs.entity.User;
 import com.alibaba.xinan.sirs.entity.form.ProductAddForm;
 import com.alibaba.xinan.sirs.entity.form.ProductQueryForm;
@@ -15,12 +16,13 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,7 +34,7 @@ import java.util.regex.Pattern;
 @Slf4j
 public class CommonController {
 
-    @Autowired
+    @Resource
     private CommonService commonService;
 
     @PostMapping("/login")
@@ -130,5 +132,37 @@ public class CommonController {
     @PutMapping("/product/edit")
     public ResponseVO editProduct(@RequestBody @Valid ProductAddForm form) {
         return commonService.editProduct(form);
+    }
+
+    /**
+     * 账户列表
+     */
+    @GetMapping("/account/list")
+    public ResponseVO getAccountList(Integer pageNum, Integer pageSize) {
+        return commonService.getAccountList(pageNum, pageSize);
+    }
+
+    /**
+     * 冻结账户
+     */
+    @PutMapping("freeze/account/{id}")
+    public ResponseVO freezeAccount(@NotNull @PathVariable Integer id) {
+        return commonService.freezeAccount(id);
+    }
+
+    /**
+     * 修改账户
+     */
+    @PutMapping("/account/edit")
+    public ResponseVO editAccount(@RequestBody @Valid Account account) {
+        return commonService.editAccount(account);
+    }
+
+    /**
+     * 添加账户
+     */
+    @PostMapping("/account/add")
+    public ResponseVO addAccount(@RequestBody Account account) {
+        return commonService.addAccount(account);
     }
 }

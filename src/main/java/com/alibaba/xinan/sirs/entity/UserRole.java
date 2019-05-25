@@ -18,16 +18,4 @@ public class UserRole implements Serializable {
     private Integer userId;
 
     private Role role;
-
-    public UserRole() {
-    }
-
-    public UserRole(String id) {
-        this.id = id;
-    }
-
-    public UserRole(Integer userId, Role role) {
-        this.userId = userId;
-        this.role = role;
-    }
 }

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>敲李奶奶</title>
+    <title>商品列表</title>
     <link href="../static/image/summer.png" type="image/x-icon" rel="shortcut icon"/>
     <link rel="stylesheet" href="../static/css/index.css">
     <script src="../static/js/vue.js"></script>
@@ -11,7 +11,7 @@
 </head>
 <body style="background-color: #e2f4f6">
 <div id="app" style="text-align: center">
-    <div style="text-align: center; margin-top: 50px"><h2>欢迎使用敲李奶奶超市物品检索系统</h2></div>
+    <div style="text-align: center; margin-top: 50px"><h2>欢迎使用超市物品检索系统</h2></div>
     <div>
         <el-form inline :model="queryForm">
             <el-form-item>
@@ -36,17 +36,20 @@
                 </el-select>
             </el-form-item>
             <el-form-item>
-                <el-button type="success" @click="addProduct()">添加商品</el-button>
+                <el-button type="primary" @click="addProduct()">添加商品</el-button>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="success" @click="manageAccount()">账户管理</el-button>
             </el-form-item>
         </el-form>
     </div>
-    <div style="margin-left: 5%; width: 90%">
+    <div style="margin-left: 5%; width: 90%;">
         <el-table :data="tableData.list" :border="true" stripe highlight-current-row>
             <el-table-column type="index" width="50"></el-table-column>
             <el-table-column prop="name" label="名称" width="180"></el-table-column>
-            <el-table-column prop="price" label="价格" width="180"></el-table-column>
-            <el-table-column prop="stock" label="库存" width="180"></el-table-column>
-            <el-table-column prop="productCategory.name" label="所属分类" width="180"></el-table-column>
+            <el-table-column prop="price" label="价格" width="80"></el-table-column>
+            <el-table-column prop="stock" label="库存" width="80"></el-table-column>
+            <el-table-column prop="productCategory.name" label="所属分类" width="100"></el-table-column>
             <el-table-column prop="description" label="描述"></el-table-column>
             <el-table-column prop="location" label="位置"></el-table-column>
             <el-table-column prop="createTime" label="上架时间"></el-table-column>
@@ -65,6 +68,7 @@
             </el-table-column>
         </el-table>
     </div>
+    <!-- 分页 -->
     <div style="margin-top: 10px;text-align: center;">
         <el-pagination
                 background
@@ -321,10 +325,6 @@
                     .catch(_ => {
                     });
             },
-            // 打开添加商品 dialog
-            addProduct() {
-                this.addProductDialogVisible = true;
-            },
             // 处理添加商品 dialog 确定按钮事件
             handleAddProductDialogConfirm() {
                 axios.post('/add/product', this.addProductForm)
@@ -334,7 +334,10 @@
                         this.loadTableData();
                     });
             },
-
+            // 账户管理按钮事件处理
+            manageAccount() {
+                location.href = '/account/management'
+            },
         },
         created() {
             this.loadTableData();

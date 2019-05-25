@@ -1,5 +1,6 @@
 package com.alibaba.xinan.sirs.service;
 
+import com.alibaba.xinan.sirs.entity.Account;
 import com.alibaba.xinan.sirs.entity.form.ProductAddForm;
 import com.alibaba.xinan.sirs.entity.form.ProductQueryForm;
 import com.alibaba.xinan.sirs.entity.form.UserRegisterForm;
@@ -65,4 +66,37 @@ public interface CommonService {
      * @return result
      */
     ResponseVO editProduct(ProductAddForm productAddForm);
+
+    /**
+     * account list
+     *
+     * @param pageNum  page number
+     * @param pageSize page size
+     * @return list
+     */
+    ResponseVO getAccountList(Integer pageNum, Integer pageSize);
+
+    /**
+     * 冻结账户
+     *
+     * @param id id
+     * @return result
+     */
+    ResponseVO freezeAccount(Integer id);
+
+    /**
+     * edit account
+     *
+     * @param account the account
+     * @return result
+     */
+    ResponseVO editAccount(Account account);
+
+    /**
+     * add account
+     *
+     * @param account the account
+     * @return reslut
+     */
+    ResponseVO addAccount(Account account);
 }

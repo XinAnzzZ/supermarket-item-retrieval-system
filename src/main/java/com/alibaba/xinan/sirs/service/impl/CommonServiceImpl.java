@@ -1,5 +1,6 @@
 package com.alibaba.xinan.sirs.service.impl;
 
+import com.alibaba.xinan.sirs.entity.Account;
 import com.alibaba.xinan.sirs.entity.Product;
 import com.alibaba.xinan.sirs.entity.User;
 import com.alibaba.xinan.sirs.entity.form.ProductAddForm;
@@ -7,6 +8,7 @@ import com.alibaba.xinan.sirs.entity.form.ProductQueryForm;
 import com.alibaba.xinan.sirs.entity.form.UserRegisterForm;
 import com.alibaba.xinan.sirs.entity.query.ProductQuery;
 import com.alibaba.xinan.sirs.entity.vo.ResponseVO;
+import com.alibaba.xinan.sirs.mapper.AccountMapper;
 import com.alibaba.xinan.sirs.mapper.ProductCategoryMapper;
 import com.alibaba.xinan.sirs.mapper.ProductMapper;
 import com.alibaba.xinan.sirs.mapper.UserMapper;
@@ -17,7 +19,6 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.thymeleaf.TemplateEngine;
@@ -25,6 +26,8 @@ import org.thymeleaf.context.Context;
 
 import javax.annotation.Resource;
 import java.util.List;
+
+import static com.alibaba.xinan.sirs.entity.vo.ResponseVO.success;
 
 /**
  * @author XinAnzzZ
@@ -43,11 +46,14 @@ public class CommonServiceImpl implements CommonService {
     @Resource
     private ProductCategoryMapper productCategoryMapper;
 
-    @Autowired
+    @Resource
     private MailUtils mailUtils;
 
-    @Autowired
+    @Resource
     private TemplateEngine templateEngine;
+
+    @Resource
+    private AccountMapper accountMapper;
 
     @Override
     public ResponseVO register(UserRegisterForm form) {
@@ -81,7 +87,7 @@ public class CommonServiceImpl implements CommonService {
         user = new User();
         BeanUtils.copyProperties(form, user);
         userMapper.insert(user);
-        return ResponseVO.success();
+        return success();
     }
 
     @Override
@@ -93,7 +99,7 @@ public class CommonServiceImpl implements CommonService {
         final String subject = "注册验证邮件";
         String process = templateEngine.process(registerMailTemplateName, context);
         mailUtils.sendHtmlMail(email, subject, process);
-        return ResponseVO.success();
+        return success();
     }
 
     @Override
@@ -104,31 +110,56 @@ public class CommonServiceImpl implements CommonService {
         PageInfo<Product> pageInfo = PageHelper
                 .startPage(form.getPageNum(), form.getPageSize())
                 .doSelectPageInfo(() -> productMapper.listAll(query));
-
-        return ResponseVO.success(pageInfo);
+        return success(pageInfo);
     }
 
     @Override
     public ResponseVO getProductCategoryList() {
-        return ResponseVO.success(productCategoryMapper.listAllCategory());
+        return success(productCategoryMapper.listAllCategory());
     }
 
     @Override
     public ResponseVO addProduct(ProductAddForm form) {
         form.setId(CommonUtils.generateId());
         productMapper.insert(form);
-        return ResponseVO.success();
+        return success();
     }
 
     @Override
     public ResponseVO deleteProduct(String productId) {
         productMapper.deleteById(productId);
-        return ResponseVO.success();
+        return success();
     }
 
     @Override
     public ResponseVO editProduct(ProductAddForm productAddForm) {
         productMapper.insert(productAddForm);
-        return ResponseVO.success();
+        return success();
+    }
+
+    @Override
+    public ResponseVO getAccountList(Integer pageNum, Integer pageSize) {
+        PageInfo<Product> pageInfo = PageHelper
+                .startPage(pageNum, pageSize)
+                .doSelectPageInfo(() -> accountMapper.listAll());
+        return success(pageInfo);
+    }
+
+    @Override
+    public ResponseVO freezeAccount(Integer id) {
+        accountMapper.freezeAccountById(id);
+        return success();
+    }
+
+    @Override
+    public ResponseVO editAccount(Account account) {
+        accountMapper.insertOrUpdateAccount(account);
+        return success();
+    }
+
+    @Override
+    public ResponseVO addAccount(Account account) {
+        accountMapper.insertOrUpdateAccount(account);
+        return success();
     }
 }

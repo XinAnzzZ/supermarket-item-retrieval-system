@@ -25,7 +25,7 @@ public class PageController {
         return "register";
     }
 
-    @GetMapping("/person")
+    @GetMapping("/account/management")
     public String edit() {
         return "person";
     }
