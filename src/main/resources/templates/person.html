@@ -184,17 +184,15 @@
                         }
                     }))
                     .catch((error => {
-                        console.log(error);
                         this.$message.error("unknown error !");
                     }));
             },
             // 冻结
-            handleFreeze() {
+            handleFreeze(row) {
                 if (row.status === '冻结') {
                     this.$message.error("账户已经是冻结状态了哦！");
                     return;
                 }
-                console.log('冻结');
                 axios.put('/freeze/account/' + row.id)
                     .then(res => {
                         this.$message({type: 'success', message: '已冻结！'});
@@ -208,8 +206,6 @@
             },
             // 翻页
             handleCurrentChange(num) {
-                console.log(num);
-                console.log(this.queryForm.pageNum);
                 this.queryForm.pageNum = num;
                 this.loadTableData();
             },
